@@ -52,16 +52,12 @@ public class UserDaoJDBCImpl implements UserDao {
                     connection.setAutoCommit(true);
                     connection.close();
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
+            } catch (SQLException ignored) {   }
         }
-
     }
 
 
-    public void dropUsersTable() throws SQLException {
+    public void dropUsersTable() {
         Connection connection = null;
         Statement statement = null;
         try {
@@ -90,12 +86,8 @@ public class UserDaoJDBCImpl implements UserDao {
                     connection.setAutoCommit(true);
                     connection.close();
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
+            } catch (SQLException ignored) { }
         }
-
     }
 
 
@@ -128,7 +120,6 @@ public class UserDaoJDBCImpl implements UserDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     public List<User> getAllUsers() {
@@ -136,8 +127,8 @@ public class UserDaoJDBCImpl implements UserDao {
         List<User> users = new ArrayList<>();
 
         try (Connection connection = Util.getConnection();
-             Statement statement = connection.createStatement()) {
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM Users");
+             Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM Users")){
 
             while (resultSet.next()) {
                 User user = new User();
@@ -147,11 +138,9 @@ public class UserDaoJDBCImpl implements UserDao {
                 user.setAge(resultSet.getByte("Age"));
                 users.add(user);
             }
-            resultSet.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
         return users;
     }
 
@@ -163,6 +152,5 @@ public class UserDaoJDBCImpl implements UserDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
 }
